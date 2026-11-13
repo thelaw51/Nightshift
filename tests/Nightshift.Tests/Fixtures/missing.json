@@ -1,0 +1,15 @@
+{
+  "page": 1,
+  "pageSize": 100,
+  "sortKey": "episodes.airDateUtc",
+  "sortDirection": "descending",
+  "totalRecords": 14,
+  "records": [
+    {
+      "id": 503, "seriesId": 1, "tvdbId": 1, "episodeFileId": 0, "seasonNumber": 5, "episodeNumber": 3,
+      "title": "Episode 3", "airDate": "2026-11-04", "airDateUtc": "2026-11-04T09:00:00Z",
+      "finaleType": null, "hasFile": false, "monitored": true,
+      "series": { "id": 1, "title": "Slow Horses", "monitored": true }
+    }
+  ]
+}
