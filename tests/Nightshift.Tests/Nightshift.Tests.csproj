@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Nightshift.Sonarr\Nightshift.Sonarr.csproj" />
+    <ProjectReference Include="..\..\src\Nightshift.Web\Nightshift.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

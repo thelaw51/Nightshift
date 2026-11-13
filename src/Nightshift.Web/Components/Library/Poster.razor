@@ -1,0 +1,29 @@
+@inject IOptions<NightshiftOptions> Options
+
+@* A series poster served by Nightshift's /posters proxy. The placeholder ground and short code sit
+   underneath; if Sonarr has no artwork the image removes itself and the placeholder shows.
+   Sample mode has no artwork, so it skips the request entirely. *@
+
+<div class="@CssClass tone-@(SeriesId % 6)">
+    @if (ShowCode)
+    {
+        <span class="poster-code" aria-hidden="true">@Code</span>
+    }
+    @if (!Options.Value.SampleData)
+    {
+        <img src="posters/@SeriesId" alt="" loading="lazy" decoding="async" onerror="this.remove()" />
+    }
+</div>
+
+@code {
+    /// <summary>The Sonarr series id.</summary>
+    [Parameter, EditorRequired] public int SeriesId { get; set; }
+
+    /// <summary>Short label shown on the placeholder.</summary>
+    [Parameter] public string? Code { get; set; }
+
+    /// <summary>Shape class, <c>poster</c> or <c>thumb</c>.</summary>
+    [Parameter] public string CssClass { get; set; } = "poster";
+
+    private bool ShowCode => Code is not null && CssClass == "poster";
+}
