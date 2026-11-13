@@ -1,0 +1,31 @@
+@* One tick per episode in a season: filled when on disk, outlined when aired but missing, faint when unaired. *@
+
+<div class="strip" role="img" aria-label="@Label">
+    @foreach (var segment in Segments)
+    {
+        <span class="strip-seg @SegmentClass(segment)"></span>
+    }
+</div>
+
+@code {
+    /// <summary>The season's episodes in order.</summary>
+    [Parameter, EditorRequired] public IReadOnlyList<StripSegment> Segments { get; set; } = [];
+
+    private string Label
+    {
+        get
+        {
+            var have = Segments.Count(s => s == StripSegment.Have);
+            var missing = Segments.Count(s => s == StripSegment.Missing);
+            var unaired = Segments.Count(s => s == StripSegment.Unaired);
+            return $"{have} of {Segments.Count} episodes on disk, {missing} missing, {unaired} not aired";
+        }
+    }
+
+    private static string SegmentClass(StripSegment segment) => segment switch
+    {
+        StripSegment.Have => "is-have",
+        StripSegment.Missing => "is-missing",
+        _ => "is-unaired",
+    };
+}

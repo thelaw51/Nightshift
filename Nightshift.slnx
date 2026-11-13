@@ -1,5 +1,9 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Nightshift.Sonarr/Nightshift.Sonarr.csproj" />
+    <Project Path="src/Nightshift.Web/Nightshift.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Nightshift.Tests/Nightshift.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,0 +1,21 @@
+# Copy to docker-compose.yml and put SONARR_API_KEY in a .env file next to it (never commit the key).
+# Join the same Docker network as Sonarr so Nightshift can reach it by container name.
+services:
+  nightshift:
+    build: .
+    container_name: nightshift
+    restart: unless-stopped
+    environment:
+      Sonarr__BaseUrl: http://sonarr:8989
+      Sonarr__ApiKey: ${SONARR_API_KEY:?Set SONARR_API_KEY in .env}
+      TZ: Europe/London
+    # Nightshift has no login yet. Publish it on your LAN address only, or skip `ports`
+    # entirely and reach it through a reverse proxy that handles authentication.
+    ports:
+      - "192.168.1.10:8990:8080"
+    networks:
+      - arr
+
+networks:
+  arr:
+    external: true
