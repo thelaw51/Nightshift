@@ -1,0 +1,12 @@
+<Project>
+
+  <!-- Settings shared by every project in the solution. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- CS1573: records document only the parameters whose meaning isn't obvious from the name. -->
+    <NoWarn>$(NoWarn);CS1573</NoWarn>
+  </PropertyGroup>
+
+</Project>

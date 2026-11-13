@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Nightshift.Sonarr/Nightshift.Sonarr.csproj" />
+  </Folder>
+</Solution>
