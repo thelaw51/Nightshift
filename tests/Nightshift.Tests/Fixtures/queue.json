@@ -1,0 +1,41 @@
+{
+  "page": 1,
+  "pageSize": 100,
+  "sortKey": "timeleft",
+  "sortDirection": "ascending",
+  "totalRecords": 2,
+  "records": [
+    {
+      "id": 41,
+      "seriesId": 7,
+      "episodeId": 702,
+      "seasonNumber": 5,
+      "series": { "id": 7, "title": "Fargo", "monitored": true, "year": 2014 },
+      "episode": { "id": 702, "seriesId": 7, "seasonNumber": 5, "episodeNumber": 10, "hasFile": false, "monitored": true },
+      "languages": [ { "id": 1, "name": "English" } ],
+      "quality": { "quality": { "id": 3, "name": "WEBDL-1080p" } },
+      "size": 4000000000,
+      "sizeleft": 3440000000,
+      "title": "Fargo.S05E10.1080p.WEB",
+      "added": "2026-11-10T08:00:00Z",
+      "status": "warning",
+      "trackedDownloadStatus": "warning",
+      "trackedDownloadState": "downloading",
+      "statusMessages": [ { "title": "Fargo.S05E10.1080p.WEB", "messages": [ "The download is stalled with no connections" ] } ],
+      "downloadClient": "qBittorrent",
+      "protocol": "torrent"
+    },
+    {
+      "id": 42,
+      "seriesId": 9,
+      "title": "Dark.S03E08.2160p",
+      "size": 9000000000,
+      "sizeleft": 1000000000,
+      "status": "aStatusFromAFutureSonarr",
+      "trackedDownloadStatus": "ok",
+      "trackedDownloadState": "somethingNew",
+      "statusMessages": [],
+      "protocol": "usenet"
+    }
+  ]
+}

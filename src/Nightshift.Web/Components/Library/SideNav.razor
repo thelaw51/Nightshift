@@ -1,0 +1,57 @@
+@* Left navigation: brand, sections with badge counts, and library disk space.
+   Only Library exists in this release; the other sections render as plain items until their pages land. *@
+
+<nav class="side-nav" aria-label="Main">
+    <div class="brand">nightshift<span class="brand-dot">.</span></div>
+    <ul class="nav-list">
+        <li>
+            <a class="nav-item" href="/" aria-current="page">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"></rect><rect x="10" y="4" width="5" height="10" rx="1.5"></rect><rect x="17" y="4" width="4" height="13" rx="1.5"></rect></svg>
+                Library
+            </a>
+        </li>
+        <li>
+            <span class="nav-item is-soon" title="Coming in a later release">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"></path></svg>
+                Activity
+                @if (Counts is { Activity: > 0 })
+                {
+                    <span class="badge badge-accent">@Counts.Activity<span class="visually-hidden"> in queue</span></span>
+                }
+            </span>
+        </li>
+        <li>
+            <span class="nav-item is-soon" title="Coming in a later release">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 16.5v.5"></path></svg>
+                Wanted
+                @if (Counts is { Wanted: > 0 })
+                {
+                    <span class="badge">@Counts.Wanted<span class="visually-hidden"> missing</span></span>
+                }
+            </span>
+        </li>
+        <li>
+            <span class="nav-item is-soon" title="Coming in a later release">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"></path></svg>
+                Settings
+            </span>
+        </li>
+    </ul>
+
+    @if (Disk is not null)
+    {
+        <div class="disk">
+            <div class="fade-rule" aria-hidden="true"></div>
+            <div class="disk-row"><span>Disk</span><strong>@LibraryComposer.FormatBytes(Disk.FreeBytes) free</strong></div>
+            <div class="disk-bar" role="img" aria-label="@($"{Disk.UsedPercent}% used")"><span style="width:@(Disk.UsedPercent)%"></span></div>
+        </div>
+    }
+</nav>
+
+@code {
+    /// <summary>Badge counts; <c>null</c> while loading.</summary>
+    [Parameter] public NavCounts? Counts { get; set; }
+
+    /// <summary>Library disk space; <c>null</c> while loading or when Sonarr reports none.</summary>
+    [Parameter] public DiskSpace? Disk { get; set; }
+}

@@ -1,0 +1,46 @@
+@* The week rail: Monday to Sunday, with each day's airings in the configured time zone. *@
+
+<aside class="week-rail" aria-labelledby="week-heading">
+    <div class="rail-head">
+        <h2 id="week-heading">This week</h2>
+        <span class="rail-range">@Range</span>
+    </div>
+
+    <ol class="days">
+        @foreach (var day in Week.Days)
+        {
+            <li class="day @(day.IsToday ? "is-today" : null)" aria-current="@(day.IsToday ? "date" : null)">
+                <div class="day-label">
+                    <div class="day-name">@day.Date.ToString("ddd", CultureInfo.InvariantCulture)</div>
+                    <div class="day-num">@day.Date.Day</div>
+                </div>
+                @if (day.Airings.Count == 0)
+                {
+                    <div class="day-empty">@(day.IsToday ? "Today · nothing airs" : "—")</div>
+                }
+                else
+                {
+                    <ul class="day-airings">
+                        @foreach (var airing in day.Airings)
+                        {
+                            <li class="card airing">
+                                <div class="airing-title">@airing.SeriesTitle · @airing.EpisodeCode</div>
+                                <div class="airing-meta">@airing.LocalTime@(airing.Note is null ? "" : $" · {airing.Note}")</div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ol>
+</aside>
+
+@code {
+    /// <summary>The week to show.</summary>
+    [Parameter, EditorRequired] public WeekView Week { get; set; } = default!;
+
+    private string Range =>
+        Week.Start.Month == Week.End.Month
+            ? $"{Week.Start.ToString("MMM d", CultureInfo.InvariantCulture)} – {Week.End.Day}"
+            : $"{Week.Start.ToString("MMM d", CultureInfo.InvariantCulture)} – {Week.End.ToString("MMM d", CultureInfo.InvariantCulture)}";
+}

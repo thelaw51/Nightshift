@@ -1,0 +1,115 @@
+@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject LibraryService LibraryLoader
+@inject ILogger<LibraryPage> Logger
+
+@* The Library screen (design 3a): week rail, attention board and up-to-date shelf.
+   Prerendering is off so Sonarr is queried once per visit rather than twice. *@
+
+<PageTitle>Library · Nightshift</PageTitle>
+
+<div class="shell">
+    <SideNav Counts="view?.Nav" Disk="view?.Disk" />
+
+    @if (error is not null)
+    {
+        <main class="state" aria-live="polite">
+            <h1>Can't load the library</h1>
+            <p>@error</p>
+            <button type="button" class="btn btn-primary" @onclick="LoadAsync" disabled="@loading">Try again</button>
+        </main>
+    }
+    else if (view is null)
+    {
+        <main class="main" aria-busy="true">
+            <h1 class="visually-hidden">Library</h1>
+            <p class="page-sub" role="status">Loading the library from Sonarr…</p>
+            <div class="skeleton" style="height:120px"></div>
+            <div class="skeleton" style="height:240px"></div>
+        </main>
+    }
+    else
+    {
+        <WeekRail Week="view.Week" />
+
+        <main class="main">
+            <div class="page-head">
+                <h1>Library</h1>
+                <span class="page-sub">@view.SeriesCount series · @NeedYouText</span>
+            </div>
+
+            @if (view.SeriesCount == 0)
+            {
+                <p class="all-clear">Sonarr has no series yet. Add one in Sonarr and it will show up here.</p>
+            }
+            else
+            {
+                <section aria-labelledby="attention-heading" style="display:flex;flex-direction:column;gap:10px">
+                    <h2 class="section-label is-accent" id="attention-heading">
+                        Needs attention <span class="section-count">@view.AttentionTotal</span>
+                    </h2>
+
+                    @if (view.Attention.Count == 0)
+                    {
+                        <p class="all-clear">Nothing needs you. Every monitored episode is on disk and the queue is healthy.</p>
+                    }
+                    else
+                    {
+                        <ul class="attention-grid">
+                            @foreach (var card in view.Attention)
+                            {
+                                <li @key="card.Id"><AttentionCardView Card="card" /></li>
+                            }
+                        </ul>
+                        @if (view.AttentionTotal > view.Attention.Count)
+                        {
+                            <p class="page-sub">Showing the @view.Attention.Count most recent of @view.AttentionTotal.</p>
+                        }
+                    }
+                </section>
+
+                <PosterShelf Shelf="view.Shelf" />
+            }
+        </main>
+    }
+</div>
+
+@code {
+    private LibraryView? view;
+    private string? error;
+    private bool loading;
+
+    private string NeedYouText => view!.AttentionTotal switch
+    {
+        0 => "all up to date",
+        1 => "1 needs you",
+        var n => $"{n} need you",
+    };
+
+    /// <inheritdoc />
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        loading = true;
+        error = null;
+        try
+        {
+            view = await LibraryLoader.GetAsync();
+        }
+        catch (Nightshift.Sonarr.SonarrException ex)
+        {
+            Logger.LogWarning("Library load failed: {Failure} {Reason}", ex.Failure, ex.Message);
+            error = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Library load failed unexpectedly");
+            error = "Something went wrong building the library. The server log has the details.";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

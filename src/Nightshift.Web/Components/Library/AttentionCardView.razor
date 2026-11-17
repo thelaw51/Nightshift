@@ -1,0 +1,34 @@
+@* One "Needs attention" card. Actions are shown but disabled until the next release wires them to Sonarr. *@
+
+<article class="card elev-sm attention" aria-labelledby="@HeadingId">
+    <div class="attention-head">
+        <Poster SeriesId="Card.SeriesId" CssClass="thumb" />
+        <div style="min-width:0;flex:1">
+            <h3 class="attention-title" id="@HeadingId">@Card.Title</h3>
+            <p class="attention-sub">@Card.Summary</p>
+        </div>
+    </div>
+
+    @if (Card.Strip is { Count: > 0 } strip)
+    {
+        <EpisodeStrip Segments="strip" />
+    }
+    else if (Card.ProgressPercent is { } progress)
+    {
+        <div class="progress" role="progressbar" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100" aria-label="Download progress">
+            <span style="width:@(progress)%"></span>
+        </div>
+    }
+
+    <div class="attention-actions">
+        <button type="button" class="btn btn-ghost" disabled title="Coming in the next release">@Card.PrimaryAction</button>
+        <button type="button" class="btn btn-ghost is-quiet" disabled title="Coming in the next release">@Card.SecondaryAction</button>
+    </div>
+</article>
+
+@code {
+    /// <summary>The card to render.</summary>
+    [Parameter, EditorRequired] public AttentionCard Card { get; set; } = default!;
+
+    private string HeadingId => $"attention-{Card.Id}";
+}

@@ -1,0 +1,38 @@
+@* The "Up to date" shelf: series with nothing to do, most recently aired first. *@
+
+<section aria-labelledby="shelf-heading" style="display:flex;flex-direction:column;gap:10px">
+    <h2 class="section-label" id="shelf-heading">
+        Up to date
+        <span class="section-count">@Shelf.Total series</span>
+        <span class="section-aside">Sort: Recently aired</span>
+    </h2>
+
+    @if (Shelf.Total == 0)
+    {
+        <p class="all-clear">Every series needs something. Nothing is fully up to date yet.</p>
+    }
+    else
+    {
+        <ul class="shelf">
+            @foreach (var item in Shelf.Items)
+            {
+                <li class="shelf-item">
+                    <Poster SeriesId="item.SeriesId" Code="@item.Code" />
+                    <span class="shelf-title">@item.Title</span>
+                </li>
+            }
+            @if (Shelf.Hidden > 0)
+            {
+                <li class="shelf-item">
+                    <div class="poster is-more"><span class="poster-code">+@Shelf.Hidden more</span></div>
+                    <span class="shelf-title muted">Browse all is coming soon</span>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+@code {
+    /// <summary>The shelf to render.</summary>
+    [Parameter, EditorRequired] public ShelfView Shelf { get; set; } = default!;
+}
